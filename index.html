@@ -1,13 +1,62 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- put the script tag in the head so logic loads prior to body content -->
+  put the script tag in the head so logic loads prior to body content
   <script src="./dist/game.js"></script>
   <title>Lawnmower</title>
 </head>
 <body>
   
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+<body>
+
+    <script type="text/javascript">
+        /* Config object. Phaser.AUTO will attempt to convert to webGL
+        if browser doesn't support webGL, it will default back to Canvas
+        width and height refer to the resolution of the game
+        */
+        let config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
+            }
+        };
+    
+        let game = new Phaser.Game(config);
+
+        function preload() {
+            this.load.image('sky', 'assets/sky.png');
+            this.load.image('ground', 'assets/platform.png');
+            this.load.image('star', 'assets/star.png');
+            this.load.image('bomb', 'assets/bomb.png');
+            this.load.spritesheet('dude', 'assets/dude.png', {
+                frameWidth: 32,
+                frameHeight: 48
+            });
+        }
+
+        function create() {
+            this.add.image(400, 300, 'sky');
+        }
+
+        function update() {
+            
+        }
+
+    </script>
+
 </body>
 </html>

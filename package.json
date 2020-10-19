@@ -4,8 +4,7 @@
   "description": "A lawnmower game inspired by Putt Putt Joins the Parade for fun and relaxation.",
   "main": "game.js",
   "dependencies": {
-    "http-server": "^0.12.3",
-    "phaser": "^3.24.1"
+     "phaser": "^3.24.1"
   },
   "devDependencies": {},
   "scripts": {
