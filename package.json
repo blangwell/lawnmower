@@ -1,0 +1,24 @@
+{
+  "name": "lawnmower",
+  "version": "1.0.0",
+  "description": "A lawnmower game inspired by Putt Putt Joins the Parade for fun and relaxation.",
+  "main": "game.js",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "phaser": "^3.24.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blangwell/lawnmower.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blangwell/lawnmower/issues"
+  },
+  "homepage": "https://github.com/blangwell/lawnmower#readme"
+}
