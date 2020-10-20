@@ -61,8 +61,10 @@
         let platforms;
         let player;
         let stars;
+        let bombs;
         let score = 0;
         let scoreText;
+        let gameOver;
 
         function create() {
             /* in Phaser, all Game Objects are positioned by their center by default
@@ -127,6 +129,18 @@
                 child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
             });
 
+            function hitBomb (player, bomb) {
+                this.physics.pause();
+                player.setTinte(0xff0000);
+                player.anims.play('turn');
+                gameOver = true;
+            }
+
+            bombs = this.physics.add.group();
+            this.physics.add.collider(bombs, platforms);
+            this.physics.add.collider(player, bombs, hitBomb, null, this)
+
+
             function collectStar(player, star) {
                 // disable the star physics body and remove from display
                 star.disableBody(true, true);
@@ -134,12 +148,28 @@
                 score += 10;
                 // setText() is phaser method for updating displayed text
                 scoreText.setText('Score: ' + score)
+
+                // we use Group method countActive to determine how many stars are 'alive'
+                // if none are, we reactivate them and set their y coords to 0
+                if (stars.countActive(true) === 0) {
+                    stars.children.iterate(function (child) {
+                        child.enableBody(true, child.x, 0, true, true);
+                    });
+                    let x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0,400);
+
+                    let bomb = bombs.create(x, 16, 'bomb');
+                    bomb.setBounce(1);
+                    bomb.setCollideWorldBounds(true);
+                    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+                }
             }
             
             // this one line of code creates collisions between the player and all platforms
             this.physics.add.collider(player, platforms);
             this.physics.add.collider(stars, platforms);
             this.physics.add.overlap(player, stars, collectStar, null, this)
+
+        
         }
         
 
