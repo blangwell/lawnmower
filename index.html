@@ -61,6 +61,8 @@
         let platforms;
         let player;
         let stars;
+        let score = 0;
+        let scoreText;
 
         function create() {
             /* in Phaser, all Game Objects are positioned by their center by default
@@ -111,7 +113,9 @@
                 repeat: -1
             })
 
-            // this one line of code creates collisions between the player and all platforms
+            // define a text game object to display the score
+            scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000'})
+
             
             stars = this.physics.add.group({
                 key: 'star',
@@ -126,13 +130,20 @@
             function collectStar(player, star) {
                 // disable the star physics body and remove from display
                 star.disableBody(true, true);
+
+                score += 10;
+                // setText() is phaser method for updating displayed text
+                scoreText.setText('Score: ' + score)
             }
             
+            // this one line of code creates collisions between the player and all platforms
             this.physics.add.collider(player, platforms);
             this.physics.add.collider(stars, platforms);
             this.physics.add.overlap(player, stars, collectStar, null, this)
         }
         
+
+
         let cursors; 
 
         function update() {
@@ -150,7 +161,7 @@
             }
 
             if (cursors.up.isDown && player.body.touching.down) {
-                player.setVelocityY(-330);
+                player.setVelocityY(-500);
             }
         }
 
