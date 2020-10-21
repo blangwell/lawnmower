@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="./dist/game.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script> -->
+    <!-- <script src="./dist/game.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
 </head>
 <body>
   
@@ -72,12 +72,13 @@
         platforms.create(750, 220, 'ground');
 
         // this creates the sprite via Physics Game Object Factory
-        // player is created with a body property which references its physics body
         player = this.physics.add.sprite(100, 450, 'dude');
-
+        
         // when sprite lands after jumping, set a slight bounce
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
+        
+        // player is created with a body property which references its physics body
         player.body.setGravityY(300);
 
         // here we define different sprite animations

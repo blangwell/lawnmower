@@ -1,26 +1,71 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  put the script tag in the head so logic loads prior to body content
-  <script src="./dist/game.js"></script>
-  <title>Lawnmower</title>
-</head>
-<body>
-  
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.24.1/phaser-arcade-physics.js"></script>
 </head>
 <body>
 <script>
+    let config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
 
+        physics: {
+            default: 'arcade',
+            arcade: { debug: false }
+
+        },
+
+        scale: {
+            mode: Phaser.Scale.NONE,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
+            width: 50,
+            height: 50,
+            zoom: Phaser.Scale.MAX_ZOOM,
+            min: {
+                width: 50,
+                height: 50
+            }
+        },
+
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        },
+    };
+
+    // create new phaser game instance with config args
+    let game = new Phaser.Game(config);
+
+    function preload() {
+        this.load.spritesheet('dude', 'assets/dude.png', {
+            frameWidth: 32,
+            frameHeight: 48
+        })
+        this.load.image('grass', 'assets/grasstileset.png');
+    }
     
+    function create() {
+        const level = [
+            [ 0, 0, 0, 1, 0, 0, 0, 3],
+            [ 0, 0, 0, 1, 0, 0, 0, 3],
+            [ 0, 0, 0, 1, 0, 0, 0, 3],
+        ]
+
+        // important to specify the tilewidth and tileheight
+        // tilemap holds data about the the map that allows us to add tilesets & layers
+        const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+        const tiles = map.addTilesetImage('grass');
+        const layer = map.createStaticLayer(0, tiles, 0, 0);
+    }
+
+    function update() {
+
+    }
+    window.addEventListener('resize', function(e) {
+        game.scale.setMaxZoom();
+    }, false)
 </script>
 </body>
 </html>
