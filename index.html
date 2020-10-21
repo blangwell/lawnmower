@@ -4,28 +4,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.24.1/phaser-arcade-physics.js"></script>
 </head>
 <body>
+<script src="js/noisejs-master/perlin.js"></script>
 <script>
     let config = {
         type: Phaser.AUTO,
         width: 800,
         height: 600,
+        backgroundColor: '#000',
+        
+        // scale: {
+        //     mode: Phaser.Scale.RESIZE,
+        //     autoCenter: Phaser.Scale.CENTER_BOTH,
+        //     width: '100%',
+        //     height: '100%',
+        //     zoom: Phaser.Scale.MAX_ZOOM,
+        //     min: {
+        //         width: 50,
+        //         height: 50
+        //     }
+        // },
 
+        scale: {
+            mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH, // center game on screen on x and y axes
+            width: 200,
+            height: 200,
+            zoom: 3,
+            min: {
+                width: 90,
+                height: 90
+            },
+            // max: {
+            //     width: 320,
+            //     height: 200
+            // }
+        },
+        
         physics: {
             default: 'arcade',
             arcade: { debug: false }
 
-        },
-
-        scale: {
-            mode: Phaser.Scale.NONE,
-            autoCenter: Phaser.Scale.CENTER_BOTH,
-            width: 50,
-            height: 50,
-            zoom: Phaser.Scale.MAX_ZOOM,
-            min: {
-                width: 50,
-                height: 50
-            }
         },
 
         scene: {
@@ -43,29 +61,75 @@
             frameWidth: 32,
             frameHeight: 48
         })
-        this.load.image('grass', 'assets/grasstileset.png');
+        this.load.spritesheet('grass', 'assets/grasstileset.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        });
     }
-    
+    let player;
     function create() {
-        const level = [
-            [ 0, 0, 0, 1, 0, 0, 0, 3],
-            [ 0, 0, 0, 1, 0, 0, 0, 3],
-            [ 0, 0, 0, 1, 0, 0, 0, 3],
+        // let levelSeed = Phaser.Utils.Array.GetRandom([5, 3, 4, 16, 8, 7])
+        let level = [
+            [ 5, 3, 4, 16, 3, 3, 3, 3, 3, 12, 15],
+            [ 3, 3, 15, 5, 3, 3, 3, 3, 3, 6, 7],
+            [ 3, 3, 3, 10, 3, 4, 3, 3, 3, 4, 3],
+            [ 3, 3, 3, 10, 3, 4, 3, 3, 3, 3, 3],
         ]
 
         // important to specify the tilewidth and tileheight
         // tilemap holds data about the the map that allows us to add tilesets & layers
-        const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
-        const tiles = map.addTilesetImage('grass');
-        const layer = map.createStaticLayer(0, tiles, 0, 0);
+        let map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+        
+        let tiles = map.addTilesetImage('grass');
+        let layer = map.createStaticLayer(0, tiles, 0, 0);
+
+        player = this.physics.add.sprite(25, 25, 'dude');
+        
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+            frameRate: 15,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+            frameRate: 15,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'still',
+            frames: [{key: 'dude', frame: 4}],
+            frameRate: 15
+        })
+
+
     }
+
+    let cursors;
 
     function update() {
-
+        cursors = this.input.keyboard.createCursorKeys();
+        if (cursors.left.isDown) {
+            player.setVelocityX(-100);
+            player.anims.play('left', true); // play the animation defined in create()
+        }    
+        else if (cursors.right.isDown) {
+            player.setVelocityX(100);
+            player.anims.play('right', true);
+        }
+        else { // without this else, player moves infinitely
+            player.setVelocityX(0);
+            player.anims.play('still');
+        }
     }
-    window.addEventListener('resize', function(e) {
-        game.scale.setMaxZoom();
-    }, false)
+
+    // window.addEventListener('resize', function(e) {
+    //     game.scale.setMaxZoom();
+    // }, false)
+
 </script>
 </body>
 </html>
