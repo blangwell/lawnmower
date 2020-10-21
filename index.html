@@ -78,6 +78,13 @@
             setXY: {x: 10, y: 10, stepX: 50},
         })
 
+        for (let i = 0; i < 100; i++) {
+            let x = Phaser.Math.RND.between(0, 800);
+            let y = Phaser.Math.RND.between(0, 600);
+
+            let newGrass = grass.create(x, y, 'grass')
+        }
+
         player = this.physics.add.sprite(25, 25, 'dude');
         
         this.anims.create({
