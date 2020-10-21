@@ -11,18 +11,6 @@
         width: 800,
         height: 600,
         backgroundColor: '#000',
-        
-        // scale: {
-        //     mode: Phaser.Scale.RESIZE,
-        //     autoCenter: Phaser.Scale.CENTER_BOTH,
-        //     width: '100%',
-        //     height: '100%',
-        //     zoom: Phaser.Scale.MAX_ZOOM,
-        //     min: {
-        //         width: 50,
-        //         height: 50
-        //     }
-        // },
 
         scale: {
             mode: Phaser.Scale.FIT,
@@ -67,6 +55,7 @@
         });
     }
     let player;
+    let grass;
     function create() {
         // let levelSeed = Phaser.Utils.Array.GetRandom([5, 3, 4, 16, 8, 7])
         let level = [
@@ -78,10 +67,16 @@
 
         // important to specify the tilewidth and tileheight
         // tilemap holds data about the the map that allows us to add tilesets & layers
-        let map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+        // let map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
         
-        let tiles = map.addTilesetImage('grass');
-        let layer = map.createStaticLayer(0, tiles, 0, 0);
+        // let tiles = map.addTilesetImage('grass');
+        // let layer = map.createStaticLayer(0, tiles, 0, 0);
+
+        grass = this.physics.add.group({
+            key: 'grass',
+            repeat: 10,
+            setXY: {x: 10, y: 10, stepX: 50},
+        })
 
         player = this.physics.add.sprite(25, 25, 'dude');
         
@@ -105,7 +100,11 @@
             frameRate: 15
         })
 
+        function mow(player, grass) {
+            grass.disableBody(true, true);
+        }
 
+        this.physics.add.overlap(player, grass, mow, null, this)
     }
 
     let cursors;
@@ -113,15 +112,22 @@
     function update() {
         cursors = this.input.keyboard.createCursorKeys();
         if (cursors.left.isDown) {
-            player.setVelocityX(-100);
+            player.setVelocityX(-40);
             player.anims.play('left', true); // play the animation defined in create()
         }    
         else if (cursors.right.isDown) {
-            player.setVelocityX(100);
+            player.setVelocityX(40);
             player.anims.play('right', true);
+        }
+        else if (cursors.down.isDown) {
+            player.setVelocityY(40);
+        }
+        else if (cursors.up.isDown) {
+            player.setVelocityY(-40);
         }
         else { // without this else, player moves infinitely
             player.setVelocityX(0);
+            player.setVelocityY(0);
             player.anims.play('still');
         }
     }
